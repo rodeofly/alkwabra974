@@ -946,8 +946,7 @@ $ ->
   $( "#back" ).button().on "click", -> $("#reveal,#screen").toggle()
   $( ".play" ).button().on "click", ->    play()
   $( ".next" ).on "click", -> play(level++)
-   
-      
+  $( ".up" ).on "click", -> $("#reveal,#screen").toggle()
   $( ".level" ).on "click", ->
     [chapter, level] = $(this).attr("id").split "-"
     [chapter, level] = [parseInt(chapter), parseInt(level)]

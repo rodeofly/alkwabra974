@@ -3,7 +3,7 @@
 	css/custom.css
 */
 #Intro {
-  background : url('images/steps/intro.jpg') 100% no-repeat;
+  background : url('./images/steps/intro.jpg') 100% no-repeat;
   width : 900px;
   height : 700px;
 
@@ -23,7 +23,7 @@
   position :absolute;
   width : 50px;
   height: 50px;
-  background: url('images/star.png');
+  background: url('./images/star.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
  
@@ -37,7 +37,7 @@
   height: 50px;
   top : 0;
   right : 0;
-  background: url('images/close.png');
+  background: url('./images/close.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
  
@@ -71,7 +71,7 @@
 
 #screen, #victory-recap {
   position : relative;
-  background : url('images/jungle.jpg');
+  background : url('./images/jungle.jpg');
   background-size : 100%;
 }
 
@@ -93,7 +93,7 @@
   width : 150px;
   height: 150px;
   
-  background: url('images/fast_forward_button.png');
+  background: url('./images/fast_forward_button.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
  
@@ -106,7 +106,7 @@
   width : 150px;
   height: 150px;
   
-  background: url('images/up_button.png');
+  background: url('./images/up_button.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
  
@@ -283,7 +283,7 @@
 
 .DF, .DC {
   background-color : rgba(0,0,0,0);
-  background-image : url('images/cartes/DC.png');
+  background-image : url('./images/cartes/DC.png');
   background-size : 100%;  
 
 }

@@ -508,7 +508,7 @@
       if ((indexOf.call(level_data.reveal, "all") >= 0) || (ref = this.string, indexOf.call(level_data.reveal, ref) >= 0) || ($.isNumeric(this.string) && (indexOf.call(level_data.reveal, "numbers") >= 0))) {
         return "<div id='" + this.id + "' class='carte' data-valeur='" + this.string + "' data-style='" + stylePower + "' style='background-image : none;'>" + this.string + "</div>";
       } else {
-        return "<div id='" + this.id + "' class='carte' data-valeur='" + this.string + "' data-style='" + stylePower + "' style='background-image : url(/images/cartes/" + this.string + ".png);'>&nbsp;</div>";
+        return "<div id='" + this.id + "' class='carte' data-valeur='" + this.string + "' data-style='" + stylePower + "' style='background-image : url(./images/cartes/" + this.string + ".png);'>&nbsp;</div>";
       }
     };
 
@@ -1213,7 +1213,7 @@
         $("#chapter" + i).append("<div class='level' id='" + i + "-" + j + "'>" + j + "</div>");
       }
       $("#chapter" + i).css({
-        background: "url('images/chapters/chapter1.jpg') 100% 100% no-repeat"
+        background: "url('./images/chapters/chapter1.jpg') 100% 100% no-repeat"
       });
     }
     ref = ["1-1", "1-3", "1-9", "1-16", "2-1", "2-5", "2-11", "3-1", "3-7", "4-1", "4-4", "5-1"];

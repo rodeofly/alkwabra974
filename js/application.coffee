@@ -386,7 +386,7 @@ class Card
     if ( ("all" in level_data.reveal) or (@string in level_data.reveal) or ($.isNumeric(@string) and ("numbers" in level_data.reveal)))
       return "<div id='#{@id}' class='carte' data-valeur='#{@string}' data-style='#{stylePower}' style='background-image : none;'>#{@string}</div>"
     else  
-      return "<div id='#{@id}' class='carte' data-valeur='#{@string}' data-style='#{stylePower}' style='background-image : url(/images/cartes/#{@string}.png);'>&nbsp;</div>"
+      return "<div id='#{@id}' class='carte' data-valeur='#{@string}' data-style='#{stylePower}' style='background-image : url(./images/cartes/#{@string}.png);'>&nbsp;</div>"
       
   moveTo : (@string) -> 
     console.log "moveTo", @string
@@ -889,7 +889,7 @@ $ ->
   for i in [1..5]
     $( "#chaptersEnd" ).before( "<section id='chapter#{i}' class='chapter'><h2>Chapitre #{i}</h2></section>" ) 
     $( "#chapter#{i}" ).append( "<div class='level' id='#{i}-#{j}'>#{j}</div>" ) for j in [1..20]
-    $( "#chapter#{i}" ).css( background : "url('images/chapters/chapter1.jpg') 100% 100% no-repeat" )
+    $( "#chapter#{i}" ).css( background : "url('./images/chapters/chapter1.jpg') 100% 100% no-repeat" )
   
   for i in ["1-1", "1-3", "1-9", "1-16", "2-1", "2-5", "2-11", "3-1", "3-7", "4-1", "4-4", "5-1"]
     $( "##{i}" ).append "<div class='star'></div>"
