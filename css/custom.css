@@ -1,0 +1,291 @@
+/*
+	jQuery Mobile Boilerplate
+	css/custom.css
+*/
+#Intro {
+  background : url('images/steps/intro.jpg') 100% no-repeat;
+  width : 900px;
+  height : 700px;
+
+}
+
+.level {
+  position : relative;
+  display: inline-block;
+  width : 50px;
+  height : 50px;
+  margin : 25px !important;
+  border : solid white 2px !important;
+  border-radius : 10px;
+}
+
+.star {
+  position :absolute;
+  width : 50px;
+  height: 50px;
+  background: url('images/star.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+ 
+  top : -25px;
+  right : -25px;
+}
+
+.close {
+  position :absolute;
+  width : 50px;
+  height: 50px;
+  top : 0;
+  right : 0;
+  background: url('images/close.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+ 
+  top : -25px;
+  right : -25px;
+}
+.astuce {
+  position : fixed;
+  top : 10%;
+  left : 50%;
+  width : 200px;
+  padding : 50px;
+  background-color : rgba(128,128,0,0.75);
+  color : white;
+  font-size : 25px;
+  text-align : justify;
+  border : solid black 5px;
+  border-radius : 25px;
+  box-shadow : 20px 20px 10px rgba(0,0,0,0.5);
+  
+  
+
+}
+#screen, #victory-recap {
+  margin   : auto;
+  padding  : 0;
+  width : 100%;
+  height: 100%;
+
+}
+
+#screen, #victory-recap {
+  position : relative;
+  background : url('images/jungle.jpg');
+  background-size : 100%;
+}
+
+#victory-recap {
+  background : rgba( 0,0,0,0.75);
+  position : absolute;
+  top : 0;
+  left : 0;
+  padding-top : 50px;
+  text-align : center;
+  vertical-align : center;
+  color : white;
+  font-size : 3em;
+  font-weight : bolder;
+}
+
+.next {
+  position :absolute;
+  width : 150px;
+  height: 150px;
+  
+  background: url('images/fast_forward_button.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+ 
+  bottom : 10;
+  right : 10%;
+}
+
+.up {
+  position :absolute;
+  width : 150px;
+  height: 150px;
+  
+  background: url('images/up_button.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+ 
+  bottom : 10;
+  right : 20%;
+
+}
+
+#panel_bottom {
+ position : absolute ;
+ width : 100%;
+ height : 10%;
+ bottom : 0;
+ right : 0;
+}
+#level_info {
+  float : right;
+  color : white;
+  font-weight : bolder ;
+}
+#level_info::before { content : 'Level '}
+
+
+#lhs, #rhs, #pioche {
+
+  position : absolute;
+  margin   : 0;
+  padding  : 0; 
+}
+
+#lhs, #rhs {
+  display : flex;
+  flex-flow: row nowrap;
+  align-items : center;
+  top      : 2%;
+  width    : 45%;
+  height   : 70%;
+  background-color : rgba( 0, 0 , 0 , 0.5);
+  border           : solid black 5px;
+  border-radius    : 10px;
+  white-space: nowrap;
+}
+#lhs {
+  left : 2%;
+  justify-content: flex-end;
+}
+#rhs {
+  right : 2%;
+  justify-content: flex-start;
+}
+
+
+#pioche { 
+  bottom   : 0;
+  width    : 100%;
+  height   : 20%;
+  background-color : rgba( 255, 255 , 255 , 0.5);
+  text-align : center;
+}
+
+
+.carte, .fraction {
+  display : inline-block;
+  margin  : 0;
+  padding : 0;
+}
+
+.carte {
+  position    : relative;
+  text-align  : center;
+  font-weight : bolder;
+  font-size   : 20px;
+  line-height : 50px;
+  width       : 50px;
+  height      : 50px;
+  background-color: white;
+  background-size : 100%;
+}
+.fraction {
+  padding: 0px;
+}
+.numerateur, .denominateur {
+  display    : block;
+  text-align : center;
+  width  : 100%;
+  height : 50px;
+  margin : 0px;
+  padding: 0px;
+}
+.numerateur { 
+  border:none;
+  margin-bottom : 10px;
+}
+.denominateur {
+  border-top : solid white 5px;
+  margin-top : 10px;
+  padding-top : 10px;
+
+  
+} 
+.denominateur:empty {
+  display: none;
+}
+
+.fraction[data-side='pioche'] {
+  display  : inline-block;
+  position : relative;
+  top      : 20%; 
+  margin   : 0px;
+}
+.fraction[data-side='pioche'] .denominateur {
+ display : none;
+}
+
+#wow_dialog {
+  font-size   : 75px;
+  font-weight : bolder;
+  text-align  : center;
+}
+.ui-dialog-titlebar {
+
+  display : none !important;
+}
+.ui-dialog .ui-dialog-content {
+    padding: 0 !important;;
+}
+
+.active-denominateur { box-shadow : 0px 0px 5px 5px yellow  !important; }
+.hover-denominateur  { box-shadow : 0px 0px 5px 5px white !important; }
+.active-numerateur { box-shadow : 0px 0px 5px 5px blue  !important; }
+.hover-numerateur  { box-shadow : 0px 0px 5px 5px white !important; }
+
+
+.fraction[data-style='true']:not([data-side='pioche']) {
+  display : flex;
+  flex-flow: column nowrap;
+  align-items : center;
+  margin : 2px;
+
+}
+
+.numerateur[data-style='true'] {
+  display : flex;
+  flex-flow: row nowrap;
+  align-items : flex-end;
+    justify-content : center;
+}
+.denominateur[data-style='true'] {
+  display : flex;
+  flex-flow: row nowrap;
+  align-items : flex-start;
+    justify-content : center;
+}
+.denominateur[data-style='true']:empty {
+  display: none;
+}
+
+
+.carte[data-style='true'] {
+  display : flex;
+  justify-content : center;
+}
+
+.bsign {
+  display : flex;
+  position : relative;
+  padding : 0;
+  margin : 2px;
+  color : white;
+  font-size : 50px;
+  font-weight : bolder;
+
+}
+
+.DF, .DC {
+  background-color : rgba(0,0,0,0);
+  background-image : url('images/cartes/DC.png');
+  background-size : 100%;  
+
+}
+
+
