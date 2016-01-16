@@ -601,7 +601,12 @@ dropOnFrac = (numOrDen) ->
       if not blocked
         blocked = true
         $(this).append ui.helper.clone().children(":first").children(":first").removeClass( "pioche" ).attr("id", unique_id++)
-        $( ".fraction" ).not( "[data-side='pioche']" ).not( $(this).parent() ).children(":last-child").append cartes["DC"]
+        switch numOrDen
+          when "numerateur"
+            $( ".fraction" ).not( "[data-side='pioche']" ).not( $(this).parent() ).children(":first-child()").append cartes["DC"]
+          else
+            $( ".fraction" ).not( "[data-side='pioche']" ).not( $(this).parent() ).children(":last-child()").append cartes["DC"]
+        
         blockOrNot(ui.draggable)
            
 ################################################################################
