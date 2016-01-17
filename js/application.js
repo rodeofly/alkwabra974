@@ -6,7 +6,7 @@
  */
 
 (function() {
-  var Card, Fraction, addPower, additionPower, block, blockOrNot, blocked, cartes, chapter, checkSuccess, crossPower, doubleNegPower, draggableCards, dropOnFrac, drop_once, dropdenPower, dropnumPower, droppableSide, flash_alert, fractionSimplify, game_chapter, get_card, insert, level, level_data, multPower, opposite, play, primeFactorPower, primeFactorization, primePower, reversePower, shuffle_cards, stylePower, unblock, unique_id, update_style, zoom,
+  var Card, Fraction, addPower, additionPower, animation_tap, animation_touch, astuces, block, blockOrNot, blocked, cartes, chapter, checkSuccess, crossPower, delay, doubleNegPower, draggableCards, dropOnFrac, drop_once, dropdenPower, dropnumPower, droppableSide, flash_alert, fractionSimplify, game_chapter, get_card, insert, level, level_data, looping, multPower, opposite, play, primeFactorPower, primeFactorization, primePower, reversePower, shuffle_cards, stylePower, unblock, unique_id, update_style, zoom,
     indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   game_chapter = {
@@ -158,7 +158,7 @@
           reveal: ["c", "-c"]
         },
         11: {
-          lhs: ["b.x"],
+          lhs: ["b.x/_"],
           rhs: ["m", "g"],
           pioche: ["b"]
         },
@@ -241,7 +241,7 @@
           rhs: ["3/r", "p", "-x"]
         },
         7: {
-          lhs: ["x/d"],
+          lhs: ["x._/d"],
           rhs: ["m", "g"],
           pioche: ["d"]
         },
@@ -322,7 +322,8 @@
       level: {
         1: {
           lhs: ["x", "2", "3"],
-          rhs: ["b"]
+          rhs: ["b"],
+          pioche: ["5"]
         },
         2: {
           lhs: ["4", "r.s"],
@@ -505,10 +506,15 @@
 
     Card.prototype.to_html = function() {
       var ref;
-      if ((indexOf.call(level_data.reveal, "all") >= 0) || (ref = this.string, indexOf.call(level_data.reveal, ref) >= 0) || ($.isNumeric(this.string) && (indexOf.call(level_data.reveal, "numbers") >= 0))) {
-        return "<div id='" + this.id + "' class='carte' data-valeur='" + this.string + "' data-style='" + stylePower + "' style='background-image : none;'>" + this.string + "</div>";
-      } else {
-        return "<div id='" + this.id + "' class='carte' data-valeur='" + this.string + "' data-style='" + stylePower + "' style='background-image : url(./images/cartes/" + this.string + ".png);'>&nbsp;</div>";
+      switch (this.string) {
+        case "_":
+          return "<div id='" + this.id + "' class='carte US' data-valeur='_' data-style='" + stylePower + "'>&nbsp;</div>";
+        default:
+          if ((indexOf.call(level_data.reveal, "all") >= 0) || (ref = this.string, indexOf.call(level_data.reveal, ref) >= 0) || ($.isNumeric(this.string) && (indexOf.call(level_data.reveal, "numbers") >= 0))) {
+            return "<div id='" + this.id + "' class='carte' data-valeur='" + this.string + "' data-style='" + stylePower + "' style='background-image : none;'>" + this.string + "</div>";
+          } else {
+            return "<div id='" + this.id + "' class='carte' data-valeur='" + this.string + "' data-style='" + stylePower + "' style='background-image : url(./images/cartes/" + this.string + ".png);'>&nbsp;</div>";
+          }
       }
     };
 
@@ -637,13 +643,11 @@
           }
         }
         filled_areas.push(best_choice);
-        $(this).css({
-          position: "absolute"
-        }).animate({
+        return $(this).css({
+          position: "absolute",
           left: rand_x,
           top: rand_y
         });
-        return console.log("and " + ($(this).attr('data-valeur')) + " is at (" + rand_x + "," + rand_y + ")");
       });
     };
     return randomize(container);
@@ -728,16 +732,7 @@
       activeClass: "ui-state-active",
       hoverClass: "ui-state-hover",
       drop: function(event, ui) {
-        var clone, drop_pos, parent, pos;
-        drop_pos = function(drag, drop) {
-          var left, top;
-          left = drag.offset().left - drop.offset().left;
-          top = drag.offset().top - drop.offset().top;
-          return {
-            top: top,
-            left: left
-          };
-        };
+        var clone, parent;
         clone = ui.helper.clone();
         clone.attr("id", unique_id++).attr("data-side", $(this).parent().attr("data-side"));
         if (stylePower) {
@@ -752,16 +747,13 @@
           parent.children(":last").after(clone);
           update_style();
         } else {
-          pos = drop_pos(ui.helper, $(this));
           clone.css({
             position: "absolute",
-            top: pos.top,
-            left: pos.left
+            top: $(this).position().top,
+            left: $(this).position().left
           });
-          $(this).append(clone);
-          clone.unwrap();
+          $(this).replaceWith(clone);
         }
-        console.log("clone_id : ", clone.attr("id"));
         return blockOrNot(draggable);
       }
     });
@@ -778,6 +770,7 @@
   };
 
   blockOrNot = function(draggable) {
+    console.log($(".DC, .DF").length);
     switch ($(".DC, .DF").length) {
       case 0:
         return unblock(draggable);
@@ -787,7 +780,7 @@
   };
 
   dropOnFrac = function(numOrDen) {
-    return $("." + numOrDen).not(".fraction[data-side='pioche'] ." + numOrDen).droppable({
+    return $(".US").droppable({
       greedy: true,
       tolerance: "touch",
       activeClass: "active-" + numOrDen,
@@ -796,18 +789,18 @@
         return draggable.attr("data-side") === "pioche";
       },
       drop: function(event, ui) {
-        if (!blocked) {
-          blocked = true;
-          $(this).append(ui.helper.clone().children(":first").children(":first").removeClass("pioche").attr("id", unique_id++));
-          switch (numOrDen) {
-            case "numerateur":
-              $(".fraction").not("[data-side='pioche']").not($(this).parent()).children(":first-child()").append(cartes["DC"]);
-              break;
-            default:
-              $(".fraction").not("[data-side='pioche']").not($(this).parent()).children(":last-child()").append(cartes["DC"]);
-          }
-          return blockOrNot(ui.draggable);
+        var carte, fractions, gdpa, id;
+        blocked = true;
+        carte = ui.helper.clone().children(":first").children(":first").removeClass("pioche").attr("id", id = unique_id++);
+        $(this).replaceWith(carte);
+        fractions = $(".fraction:not([data-side='pioche'])");
+        gdpa = $("#" + id).parent().parent();
+        if ($("#" + id).parent().hasClass("numerateur")) {
+          fractions.not(gdpa).children(":first-child()").append(cartes["DC"]);
+        } else {
+          fractions.not(gdpa).children(":last-child()").append(cartes["DC"]);
         }
+        return blockOrNot(ui.draggable);
       }
     });
   };
@@ -858,7 +851,6 @@
           drag = draggable.children(':first').children(':first').attr("data-valeur");
           drag_number = $.isNumeric(drag);
           drop_number = $.isNumeric(drop);
-          console.log(drop, drag);
           return ((("-" + drop) === drag) || (("-" + drag) === drop)) || (addPower && drag_number && drop_number);
         }
       },
@@ -934,6 +926,7 @@
       },
       drop: function(event, ui) {
         var clone, drop_pos, first, id, side_draggable, value;
+        blocked = true;
         drop_pos = function(element, drop) {
           var left, top;
           if (stylePower) {
@@ -958,6 +951,7 @@
           }
         };
         side_draggable = ui.draggable.attr("data-side");
+        console.log(side_draggable);
         switch (side_draggable) {
           case "pioche":
             clone = ui.helper.clone();
@@ -966,8 +960,8 @@
             $("#" + opposite[side]).append(cartes["DF"]);
             $("#" + opposite[side] + " .DF").css({
               position: "absolute",
-              top: '0',
-              left: '0'
+              top: '50%',
+              left: '50%'
             });
             return blockOrNot(ui.draggable);
           case "lhs":
@@ -997,17 +991,27 @@
   };
 
   draggableCards = function() {
+    var multPowerSelector;
     $(".fraction[data-side='pioche']").draggable({
       containment: "#screen",
       helper: 'clone',
       revert: 'invalid',
+      snap: true,
+      snapMode: "inner",
       start: function(e) {
-        $("#lhs .denominateur:empty, #rhs .denominateur:empty").append("<div class='tidbit'></div>");
+        if (dropdenPower && (!blocked)) {
+          $("#lhs .denominateur, #rhs .denominateur").not($(".US").parent()).append((new Card("_")).to_html());
+          dropOnFrac("denominateur");
+        }
+        if (dropnumPower && (!blocked)) {
+          $("#lhs .numerateur, #rhs .numerateur").not($(".US").parent()).append((new Card("_")).to_html());
+          dropOnFrac("numerateur");
+        }
         return $(this).css('z-index', 1);
       },
       stop: function(e) {
         $(this).css('z-index', 0);
-        return $(".tidbit").remove();
+        return $(".US").remove();
       }
     });
     $(".fraction ").not(".fraction[data-side='pioche']").draggable({
@@ -1045,17 +1049,34 @@
           containement: "parent"
         });
     }
-    $(".denominateur .carte").not(".fraction[data-side='pioche'] .carte").draggable({
+    multPowerSelector = multPower ? ".numerateur .carte:not(:only-child)" : "nothing";
+    $(".denominateur .carte, " + multPowerSelector).not(".fraction[data-side='pioche'] .carte").draggable({
       helper: 'clone',
       revert: 'invalid',
-      containment: function(e) {
-        return $(this).parent().parent();
-      },
+      containment: "parent",
       start: function(e) {
         return $(this).css('z-index', 1);
       },
       stop: function(e) {
         return $(this).css('z-index', 0);
+      },
+      drag: function(e) {
+        var atLeft, atRight, fraction, margin, maxLeft, maxTop, minLeft, minTop, over, under;
+        margin = 10;
+        fraction = $(this).parent().parent();
+        minLeft = fraction.offset().left;
+        maxLeft = minLeft + fraction.width();
+        minTop = fraction.offset().top;
+        maxTop = minTop + fraction.height();
+        over = e.clientY < (minTop + margin);
+        under = e.clientY > (maxTop + margin);
+        atLeft = e.clientX < (minLeft + margin);
+        atRight = e.clientX > (maxLeft + margin);
+        if (over || under || atLeft || atRight) {
+          e.type = 'mousedown';
+          $(this).trigger('mouseup');
+          return fraction.trigger(e);
+        }
       }
     });
     $(".denominateur .carte").not(".fraction[data-side='pioche'] .carte").each(function() {
@@ -1065,19 +1086,6 @@
         containment: $el.parent().parent()
       });
     });
-    if (multPower) {
-      $(".numerateur .carte:not(:only-child)").not(".fraction[data-side='pioche'] .carte").draggable({
-        helper: 'clone',
-        revert: 'invalid',
-        containment: "parent",
-        start: function(e) {
-          return $(this).css('z-index', 1);
-        },
-        stop: function(e) {
-          return $(this).css('z-index', 0);
-        }
-      });
-    }
     $(".carte[data-valeur='1']:not(:only-child)").not(".fraction[data-side='pioche'] .carte").on("click", function() {
       if (!$(this).is(":only-child")) {
         $(this).remove();
@@ -1092,13 +1100,13 @@
         return get_card($(this)).reverse();
       });
     }
+    additionPower();
     if (dropdenPower) {
       dropOnFrac("denominateur");
     }
     if (dropnumPower) {
       dropOnFrac("numerateur");
     }
-    additionPower();
     if (primePower) {
       primeFactorPower();
     }
@@ -1142,8 +1150,133 @@
     return cartes["DC"] = "<li id='' class='carte DC' data-valeur='DC' data-style='" + stylePower + "'>&nbsp;</li>";
   };
 
+  delay = function(ms, func) {
+    return setTimeout(func, ms);
+  };
+
+  looping = function(ms, func) {
+    return setInterval(func, ms);
+  };
+
+  animation_tap = function(element, image) {
+    var boucle, depart, restart;
+    if (image == null) {
+      image = "tap";
+    }
+    restart = function() {
+      $("#astuce-simple-touch").show().css({
+        zIndex: 1000,
+        background: "url('./css/images/" + image + ".gif?" + (Math.random()) + "')",
+        top: depart.top - 45,
+        left: depart.left - 5
+      });
+      return delay(1000, function() {
+        return $("#astuce-simple-touch").fadeOut("slow");
+      });
+    };
+    depart = element.offset();
+    restart();
+    boucle = looping(3000, function() {
+      return restart();
+    });
+    return $("body").one("mousedown", function() {
+      clearInterval(boucle);
+      return $("#astuce-simple-touch").hide();
+    });
+  };
+
+  animation_touch = function(element1, element2) {
+    var boucle, clone, depart, destination, left, position, ref, restart, top;
+    restart = function() {
+      $("body").append(clone.show().css({
+        position: "absolute",
+        top: depart.top,
+        left: depart.left
+      }));
+      $("#astuce-simple-touch").show().css({
+        zIndex: 1000,
+        background: "url('./css/images/touch.gif?" + (Math.random()) + "')",
+        top: depart.top - 45,
+        left: depart.left - 5
+      });
+      return delay(1000, function() {
+        $("#astuce-simple-touch").animate({
+          top: destination.top - 45,
+          left: destination.left - 5
+        });
+        return clone.animate({
+          top: destination.top,
+          left: destination.left
+        }, function() {
+          return $(this).fadeOut("slow", function() {
+            return $("#astuce-simple-touch").fadeOut("slow");
+          });
+        });
+      });
+    };
+    clone = element1.clone();
+    switch (element2) {
+      case "lhs":
+      case "rhs":
+        position = $("#" + element2).offset();
+        ref = [position.top + Math.round($("#" + element2).width() / 2), position.left + Math.round($("#" + element2).height() / 2)], top = ref[0], left = ref[1];
+        destination = {
+          top: top,
+          left: left
+        };
+        break;
+      default:
+        position = element2.offset();
+        destination = {
+          top: position.top,
+          left: position.left
+        };
+    }
+    depart = element1.offset();
+    restart();
+    boucle = looping(3000, function() {
+      return restart();
+    });
+    return $("body").one("mousedown", function() {
+      clearInterval(boucle);
+      $("#astuce-simple-touch").hide();
+      return clone.remove();
+    });
+  };
+
+  astuces = function() {
+    switch (chapter + "-" + level) {
+      case "1-1":
+        return animation_tap($(".carte[data-valeur='0']").first());
+      case "1-3":
+        return animation_touch($(".carte[data-valeur='2']").first(), $(".carte[data-valeur='-2']").first());
+      case "1-9":
+        return animation_touch($(".carte[data-valeur='-g']").first(), "lhs");
+      case "1-16":
+        return animation_tap($("#pioche .carte[data-valeur='p']").first());
+      case "2-1":
+        return animation_touch($(".denominateur .carte[data-valeur='p']").first(), $(".numerateur .carte[data-valeur='p']").first());
+      case "2-5":
+        return animation_tap($(".carte[data-valeur='1']").first());
+      case "2-11":
+        return animation_touch($("#pioche .carte[data-valeur='b']").first(), $(".carte[data-valeur='_']"));
+      case "3-1":
+        return animation_touch($(".carte[data-valeur='t']").first(), "lhs");
+      case "3-7":
+        return animation_touch($("#pioche .carte[data-valeur='d']").first(), $(".carte[data-valeur='_']"));
+      case "4-1":
+        return animation_touch($(".carte[data-valeur='2']").first(), $(".carte[data-valeur='3']"));
+      case "4-4":
+        return animation_tap($(".carte[data-valeur='6']").first(), "double-tap");
+      case "4-8":
+        return animation_touch($(".carte[data-valeur='2']").first(), $(".carte[data-valeur='3']"));
+      case "5-1":
+        return animation_tap($(".carte[data-valeur='-1']").first(), "double-tap");
+    }
+  };
+
   play = function() {
-    var i, k, len, ref, ref1, ref2;
+    var i, k, len, ref, ref1;
     console.log("...entering level " + level);
     $(".astuce, #victory-recap").hide();
     $("#level_info").html(chapter + "-" + level);
@@ -1159,6 +1292,9 @@
     }
     if ((chapter > 2) && (level > 6) || (chapter > 3)) {
       dropnumPower = true;
+    }
+    if ((chapter === 3) && (level === 7)) {
+      dropdenPower = false;
     }
     if (chapter > 2) {
       crossPower = true;
@@ -1196,10 +1332,7 @@
     }
     insert(level_data);
     draggableCards();
-    if ((ref2 = chapter + "-" + level) === "1-1" || ref2 === "1-3" || ref2 === "1-9" || ref2 === "1-16" || ref2 === "2-1" || ref2 === "2-5" || ref2 === "2-11" || ref2 === "3-1" || ref2 === "3-7" || ref2 === "4-1" || ref2 === "4-4" || ref2 === "5-1") {
-      console.log("#astuce_" + chapter + "-" + level);
-      return $("#astuce-" + chapter + "-" + level).show();
-    }
+    return astuces();
   };
 
   $(function() {
@@ -1207,7 +1340,6 @@
     $(".dialog").dialog({
       autoOpen: false
     });
-    $(".astuce").draggable().append("<div class='close'></div>");
     $("#screen").toggle();
     for (i = k = 1; k <= 5; i = ++k) {
       $("#chaptersEnd").before("<section id='chapter" + i + "' class='chapter'><h2>Chapitre " + i + "</h2></section>");
@@ -1218,7 +1350,7 @@
         background: "url('./images/chapters/chapter1.jpg') 100% 100% no-repeat"
       });
     }
-    ref = ["1-1", "1-3", "1-9", "1-16", "2-1", "2-5", "2-11", "3-1", "3-7", "4-1", "4-4", "5-1"];
+    ref = ["1-1", "1-3", "1-9", "1-16", "2-1", "2-5", "2-11", "3-1", "3-7", "4-1", "4-4", "4-8", "5-1"];
     for (m = 0, len = ref.length; m < len; m++) {
       i = ref[m];
       $("#" + i).append("<div class='star'></div>");

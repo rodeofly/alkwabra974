@@ -3,7 +3,7 @@
 	css/custom.css
 */
 #Intro {
-  background : url('images/steps/intro.jpg') 100% no-repeat;
+  background : url('./images/steps/intro.jpg') 100% no-repeat;
   width : 900px;
   height : 700px;
 
@@ -23,7 +23,7 @@
   position :absolute;
   width : 50px;
   height: 50px;
-  background: url('images/star.png');
+  background: url('./images/star.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
  
@@ -37,30 +37,15 @@
   height: 50px;
   top : 0;
   right : 0;
-  background: url('images/close.png');
+  background: url('./images/close.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
  
   top : -25px;
   right : -25px;
 }
-.astuce {
-  position : fixed;
-  top : 10%;
-  left : 50%;
-  width : 200px;
-  padding : 50px;
-  background-color : rgba(128,128,0,0.75);
-  color : white;
-  font-size : 25px;
-  text-align : justify;
-  border : solid black 5px;
-  border-radius : 25px;
-  box-shadow : 20px 20px 10px rgba(0,0,0,0.5);
-  
-  
 
-}
+
 #screen, #victory-recap {
   margin   : auto;
   padding  : 0;
@@ -71,7 +56,7 @@
 
 #screen, #victory-recap {
   position : relative;
-  background : url('images/jungle.jpg');
+  background : url('./images/jungle.jpg');
   background-size : 100%;
 }
 
@@ -93,7 +78,7 @@
   width : 150px;
   height: 150px;
   
-  background: url('images/fast_forward_button.png');
+  background: url('./images/fast_forward_button.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
  
@@ -106,13 +91,45 @@
   width : 150px;
   height: 150px;
   
-  background: url('images/up_button.png');
+  background: url('./images/up_button.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
  
   bottom : 10;
-  right : 20%;
+  left : 20%;
 
+}
+
+.astuce[data-click=''] {
+  position : fixed;
+  top : 10%;
+  left : 50%;
+  width : 200px;
+  padding : 50px;
+  background-color : rgba(128,128,0,0.75);
+  color : white;
+  font-size : 25px;
+  text-align : justify;
+  border : solid black 5px;
+  border-radius : 25px;
+  box-shadow : 20px 20px 10px rgba(0,0,0,0.5);
+}
+
+.astuce[data-click='tap'] {
+  position : absolute;
+  background: url('./images/tap.gif');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  width : 124px;
+  height : 70px;
+}
+.astuce[data-click='touch'] {
+  position : absolute;
+  background: url('./images/touch.gif');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  width : 124px;
+  height : 70px;
 }
 
 #panel_bottom {
@@ -144,7 +161,7 @@
   top      : 2%;
   width    : 45%;
   height   : 70%;
-  background-color : rgba( 0, 0 , 0 , 0.5);
+  background-color : rgba( 255, 255 , 255 , 0.5);
   border           : solid black 5px;
   border-radius    : 10px;
   white-space: nowrap;
@@ -163,7 +180,7 @@
   bottom   : 0;
   width    : 100%;
   height   : 20%;
-  background-color : rgba( 255, 255 , 255 , 0.5);
+  background-color : rgba( 0, 0 , 0 , 0.5);
   text-align : center;
 }
 
@@ -184,9 +201,11 @@
   height      : 50px;
   background-color: white;
   background-size : 100%;
+  border-radius : 5px;
 }
 .fraction {
-  padding: 0px;
+  padding: 10px;
+  /*border : solid black 2px;*/
 }
 .numerateur, .denominateur {
   display    : block;
@@ -201,7 +220,8 @@
   margin-bottom : 10px;
 }
 .denominateur {
-  border-top : solid white 5px;
+  border-top : solid black 5px;
+  border-radius : 5px;
   margin-top : 10px;
   padding-top : 10px;
 
@@ -281,9 +301,9 @@
 
 }
 
-.DF, .DC {
+.DF, .DC, .US {
   background-color : rgba(0,0,0,0);
-  background-image : url('images/cartes/DC.png');
+  background-image : url('./images/cartes/DC.png');
   background-size : 100%;  
 
 }

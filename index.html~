@@ -78,7 +78,7 @@
   
   <div id="wow_dialog" class="dialog">!</div>
   <div id="astuce-simple-tap" class="astuce" data-click="tap"></div>
-  <div id="astuce-simple-touch" class="astuce" data-click="touch"></div>
+  <div id="astuce-simple-touch" class="astuce">Fais glisser une carte sur son négatif !</div>
   <div id="astuce-1-9" class="astuce">Utilise la pioche ! Mais si tu glisses une carte d'un coté, il faut faire pareil de l'autre</div>
   <div id="astuce-1-16" class="astuce">Tu peux prendre le négatif d'une carte de la pioche en cliquant dessus d'abord !</div>
   
