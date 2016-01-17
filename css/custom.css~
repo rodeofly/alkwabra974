@@ -205,7 +205,7 @@
 }
 .fraction {
   padding: 10px;
-  /*border : solid black 2px;*/
+  border : solid black 2px;
 }
 .numerateur, .denominateur {
   display    : block;
@@ -216,7 +216,7 @@
   padding: 0px;
 }
 .numerateur { 
-  border:none;
+  border:solid black 2px;
   margin-bottom : 10px;
 }
 .denominateur {
