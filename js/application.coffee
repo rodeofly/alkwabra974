@@ -500,7 +500,7 @@ update_style = () ->
 checkSuccess = () ->
   console.log "check success..."
   x = $( ".carte[data-valeur='x']" ).not("[data-side='pioche'] .carte")
-  console.log "il y a #{x.length} x !"
+  #console.log "il y a #{x.length} x !"
   if ( x.length is 1)
     if (x.parent().parent().parent().find(".carte").length is 1)
       $( ".astuce" ).hide()
@@ -691,10 +691,8 @@ primeFactorPower = () ->
       card = get_card($(this))
       card.reverse()
       if $( "##{card.id}" ).next(".carte").length
-        console.log "1"
         get_card($( "##{card.id}" ).next(".carte")).reverse()
       else
-        console.log "2"
         get_card($( "##{card.id}" ).prev(".carte")).reverse()
        
 ################################################################################
@@ -780,7 +778,7 @@ draggableCards = () ->
       stop:  (e) -> $( this ).css('z-index', 0)    
     .on "click", ->
       if $(this).children(':last').is(':empty') and $(this).children(':first').children().is(':only-child')
-        console.log "carte seule !"
+        #console.log "carte seule !"
         carte = $(this).children(':first').children(':first')
         if $.isNumeric( carte.attr("data-valeur") )
           switch parseInt( carte.attr("data-valeur") )
@@ -813,10 +811,10 @@ draggableCards = () ->
       start : (e) -> $( this ).css('z-index', 1)
       stop  : (e) -> $( this ).css('z-index', 0) 
    
-  $( ".fraction .carte:not(:only-child)" ).not( ".fraction[data-side='pioche'] .carte" ).on "click", ->
-    if $(this).attr("data-valeur") is "1"
-      $(this).remove()
-      checkSuccess()
+  $( ".carte[data-valeur='1']:not(:only-child)" ).not( ".fraction[data-side='pioche'] .carte" ).on "click", ->
+      if not $(this).is(":only-child")
+        $(this).remove()
+        checkSuccess()
 
 
   ##############################################################################
