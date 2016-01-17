@@ -1,6 +1,6 @@
 ### 
-	jQuery Mobile Boilerplate
-	application.coffee
+  jQuery Mobile Boilerplate
+  application.coffee
 ###
      
 game_chapter = 
@@ -346,6 +346,79 @@ game_chapter =
      3 :       
        lhs    : ["t"]
        rhs    : ["x.b.-r/r.-b"]
+     4 :       
+       lhs    : ["-v","-1.-v","p"]
+       rhs    : ["-1.b","x","b"]
+     5 :       
+       lhs    : ["p"]
+       rhs    : ["b.-r.m.-g.x.s.-t/g.-m.r.-b.t.-s"]
+     6 :       
+       lhs    : ["g.m/-g.m","g.m/g.m","x"]
+       rhs    : ["s"]
+       pioche : ["s","m","g"]
+     7 :       
+       lhs    : ["r"]
+       rhs    : ["-1.-x","-u/u","1"]
+       pioche : ["1","u"]
+     8 :       
+       lhs    : ["-1.-x","t.m"]
+       rhs    : ["-p/p"]
+       pioche : ["1","d","m","p","t"]
+     9 :       
+       lhs    : ["x.b","-c.d"]
+       rhs    : ["x/-x","b"]
+       pioche : ["c","d","b"]
+       reveal : ["c"]
+     10 :       
+       lhs    : ["-r.-1.x.g/r"]
+       rhs    : ["v.g"]
+       pioche : ["v","g"]
+     11 :       
+       lhs    : ["-x","t","-r.m/m"]
+       rhs    : ["v.s"]
+       pioche : ["v","s"]
+     12 :       
+       lhs    : ["b"]
+       rhs    : ["-1.x.a/-a"]
+       pioche : ["a"]
+     13 :       
+       lhs    : ["-1.f","x.-h","f"]
+       rhs    : ["r.e"]
+       pioche : ["h","f","e"]
+       reveal : ["h","f","e"]
+     14 :       
+       lhs    : ["x"]
+       rhs    : ["x","x"]
+     15 :       
+       lhs    : ["x"]
+       rhs    : ["x","x"]
+       reveal : ["x"]
+     16 :       
+       lhs    : ["x.-6/2.3"]
+       rhs    : ["t"]
+       pioche : ["1"]
+     17 :       
+       lhs    : ["-c/-2"]
+       rhs    : ["x/4","a","a","-1.a"]
+       pioche : ["1","a","c","4"]
+       reveal : ["a", "x", "c"]
+     18 :       
+       lhs    : ["-x/d.-b"]
+       rhs    : ["4/-4.-d.b"]
+       pioche : ["1","d","b"]
+       reveal : ["b", "x", "d"]
+     19 :       
+       lhs    : ["x.3.-2"]
+       rhs    : ["2.-2","4","e"]
+       pioche : ["6"]
+       reveal : ["x", "e"]
+     20 :       
+       lhs    : ["b/-4","-1.-3"]
+       rhs    : ["x/2","-1.-3"]
+       pioche : ["2","3"]
+       reveal : ["x", "b"]
+       
+  
      
 ################################################################################
 ################################################################################
@@ -368,6 +441,9 @@ multPower = false
 doubleNegPower = false
 cartes = {}
 opposite = {lhs : "rhs", rhs : "lhs"}
+
+delay   = (ms, func) -> setTimeout  func, ms
+looping = (ms, func) -> setInterval func, ms
 ################################################################################
 ################################################################################
 ################################################################################
@@ -393,12 +469,12 @@ class Card
           return "<div id='#{@id}' class='carte' data-valeur='#{@string}' data-style='#{stylePower}' style='background-image : url(./images/cartes/#{@string}.png);'>&nbsp;</div>"
       
   moveTo : (@string) -> 
-    console.log "moveTo", @string
+    #console.log "moveTo", @string
     $( "##{@id}" ).replaceWith this.to_html()
     draggableCards()
   
   reverse : () ->
-    console.log "reverse", @string
+    #console.log "reverse", @string
     switch @string[0]
       when "0" then @string = @string
       when "-" then @string = @string[1..]
@@ -423,6 +499,12 @@ class Fraction
         <div id='denominateur_#{@id}' class='denominateur' data-style='#{stylePower}'>#{d}</div>
     </div>
     """
+
+explosion_effect = (position) ->
+  $("body").append( "<div id='#{id = unique_id++}' class='explosion'></div>" )
+  console.log "destruction at #{position.top}, #{position.left}"
+  $("##{id}").css {top: position.top-15, left: position.left-15, background: "url('./css/images/explosion.gif?#{Math.random()}')"}
+  $("##{id}").hide 1000, -> $("##{id}").remove()
 ################################################################################
 ################################################################################
 ################################################################################
@@ -500,20 +582,22 @@ update_style = () ->
 checkSuccess = () ->
   console.log "check success..."
   x = $( ".carte[data-valeur='x']" ).not("[data-side='pioche'] .carte")
-  #console.log "il y a #{x.length} x !"
+  console.log "il y a #{x.length} x !"
   if ( x.length is 1)
     if (x.parent().parent().parent().find(".carte").length is 1)
-      $( ".astuce" ).hide()
-      if level is 20
-        $( "#feedback" ).html( "Essaye un nouveau chapitre" )
-        $( ".next" ).hide()
-        $( ".up" ).show()
-        $( "#victory-recap" ).show()
-      else
-        console.log "woho" + level
-        $( "#feedback" ).html( "Essaye le suivant..." )
-        $( ".next,.up" ).show()
-        $( "#victory-recap" ).show()
+      console.log "success !"
+      delay 2000, ->
+        $( ".astuce" ).hide()
+        if level is 20
+          $( "#feedback" ).html( "Essaye un nouveau chapitre" )
+          $( ".next" ).hide()
+          $( ".up" ).show()
+
+        else
+          console.log "woho" + level
+          $( "#feedback" ).html( "Essaye le suivant..." )
+          $( ".next,.up" ).show()
+        $( "#victory-recap" ).show().fireworks()
       
 flash_alert = (element) ->
   $( "#wow_dialog" ).dialog "close"
@@ -530,7 +614,7 @@ flash_alert = (element) ->
 block = (draggable) ->
   console.log "Entering block mode..."
   $( "#pioche .carte " ).off "click"
-  $( ".fraction, .pioche, .carte" ).not(draggable).not(draggable.find(".carte")).on "mousedown", -> flash_alert(draggable)
+  $( ".carte" ).not(draggable.find(".carte")).on "click mousedown", -> flash_alert(draggable)
   $( ":ui-draggable" ).not(draggable).draggable( "destroy" )
   $( ":ui-droppable" ).droppable( "destroy" )
 
@@ -540,7 +624,9 @@ block = (draggable) ->
     activeClass : "ui-state-active"
     hoverClass  : "ui-state-hover"
     drop: ( event, ui ) ->
-      $(this).after ui.helper.clone().children(":first").children(":first").css( {position:"relative"}).removeClass( "pioche" ).attr("id", unique_id++)
+      clone = ui.draggable.clone().attr("id", unique_id++)
+      clone.find( ".carte" ).attr("id", unique_id++)
+      $(this).after clone.children(":first").children(":first").css( {position:"relative"}).removeClass( "pioche" )
       $(this).remove()
       blockOrNot(draggable)
       
@@ -550,8 +636,9 @@ block = (draggable) ->
     activeClass : "ui-state-active"
     hoverClass  : "ui-state-hover"
     drop: ( event, ui ) ->
-      clone = ui.helper.clone()
-      clone.attr("id", unique_id++).attr( "data-side", $(this).parent().attr("data-side") )
+      clone = ui.draggable.clone().attr("id", unique_id++)
+      clone.find( ".carte" ).attr("id", unique_id++)
+      clone.attr( "data-side", $(this).parent().attr("data-side") )
       if stylePower
         clone.css({position: "relative", display : "inline-block", top: 0, left:0 }).attr( "data-style", "true")
         parent = $( this ).parent()
@@ -566,7 +653,7 @@ block = (draggable) ->
 unblock = (draggable) ->
   console.log "Leaving block mode..."
   blocked = false
-  $( ".fraction, .pioche, .carte" ).not(draggable).not(draggable.find(".carte")).off "mousedown"
+  $( ".carte" ).not(draggable.find(".carte")).off "click mousedown"
   draggable.remove() if drop_once
   draggableCards()
   
@@ -623,7 +710,8 @@ fractionSimplify = () ->
         get_card(  $( this ) ).moveTo "#{drop_number*drag_number}"
       else
         ui.draggable.remove()
-        get_card(  $( this ) ).moveTo "1" 
+        get_card(  $( this ) ).moveTo "1"
+      explosion_effect( $( this ).offset() )
 
 ################################################################################
 ################################################################################
@@ -646,42 +734,40 @@ additionPower = () ->
     active : "ui-state-active"
     hover  : "ui-state-hover"
     drop: ( event, ui ) ->
-      drop = $( this ).children(':first').children(':first').attr( "data-valeur" )
-      drag = ui.draggable.children(':first').children(':first').attr( "data-valeur" )
-      drag_number = $.isNumeric( drag )
-      drop_number = $.isNumeric( drop )
+      console.log "wooka"
+      carte = $( this ).children(':first').children(':first')
+      drag_number = $.isNumeric( ui.draggable.children(':first').children(':first').attr( "data-valeur" ) )
+      drop_number = $.isNumeric( carte.attr( "data-valeur" ) )
       if ( addPower and drag_number and drop_number)
         drag_number = parseInt ui.draggable.children(':first').children().attr("data-valeur") 
-        drop_number = parseInt $( this ).children(':first').children().attr("data-valeur") 
-        console.log "boozoo" + drag_number + " " + drop_number
-        $( this ).children(':first').children(":first").removeClass("ui-state-active ui-state-hover")
-        ui.draggable.remove()
-        get_card( $( this ).children(':first').children(':first')).moveTo "#{drop_number+drag_number}"
-        update_style() if stylePower
-      else 
-        $( this ).children(':first').children(":first").removeClass("ui-state-active ui-state-hover")
-        ui.draggable.remove()
-        get_card(  $( this ).children(':first').children(':first' ) ).moveTo "0"
+        drop_number = parseInt carte.attr("data-valeur") 
+        get_card( carte ).moveTo "#{drop_number+drag_number}"
+      else
+        get_card( carte ).moveTo "0"           
+      ui.draggable.remove() 
+      explosion_effect( $(this).offset() )       
+      update_style() if stylePower
+      checkSuccess()
 
 ################################################################################
 ################################################################################
 ################################################################################    
 primeFactorPower = () ->  
-  $( ".fraction .carte" ).not( ".fraction[data-side='pioche']" ).on "dblclick", ->
+  $( ".fraction .carte" ).not( ".fraction[data-side='pioche']" ).on "dblclick", (event, ui) ->
+    event.stopImmediatePropagation()
     value = $(this).attr("data-valeur")
     console.log "primeFactorPower :", value
-    if ($.isNumeric( value ) and value > 0)
-      factors = primeFactorization value
+    if ( $.isNumeric( value ) and (parseInt(value) > 1) )
+      factors = primeFactorization parseInt value 
       $(this).parent().append (new Card(f)).to_html() for f in factors
       $(this).remove()
-      draggableCards()
-    else if ( doubleNegPower and $(this).siblings(".carte").length )
-      card = get_card($(this))
-      card.reverse()
-      if $( "##{card.id}" ).next(".carte").length
-        get_card($( "##{card.id}" ).next(".carte")).reverse()
-      else
-        get_card($( "##{card.id}" ).prev(".carte")).reverse()
+    else
+      if doubleNegPower
+        $( this ).before (new Card("-1")).to_html()
+        get_card($(this)).reverse()        
+    draggableCards()
+    
+
        
 ################################################################################
 ################################################################################
@@ -700,7 +786,6 @@ droppableSide = (side) ->
             return (crossPower or  (side_draggable is side))
           
     drop      : ( event, ui ) ->
-      blocked = true
       drop_pos = (element, drop) ->
         if stylePower
           element.css({position: "relative", display : "inline-block", top: 0, left:0 }).attr( "data-style", true)
@@ -717,6 +802,7 @@ droppableSide = (side) ->
       console.log side_draggable
       switch side_draggable
         when "pioche"
+          blocked = true
           clone = ui.helper.clone()
           clone.attr("id", unique_id++).attr( "data-side", side ).find( ".carte").attr("id", unique_id++)
           drop_pos(clone, $(this))
@@ -741,58 +827,47 @@ droppableSide = (side) ->
               $("##{side_draggable}").append (new Fraction("0")).to_html()
             else
               checkSuccess()
-            draggableCards()      
+            draggableCards()  
+
 ################################################################################
 ################################################################################
 ################################################################################                      
 draggableCards = () ->        
-  $( ".fraction[data-side='pioche']" )
-    .draggable
-      containment: "#screen"
-      helper : 'clone'
-      revert: 'invalid' 
-      snap : true
-      snapMode : "inner"
-      start: (e) ->
-        if ( dropdenPower and (not blocked))
-          $("#lhs .denominateur, #rhs .denominateur" ).not($(".US").parent()).append (new Card("_")).to_html()
-          dropOnFrac("denominateur") 
-        if ( dropnumPower and (not blocked))
-          $("#lhs .numerateur, #rhs .numerateur" ).not($(".US").parent()).append (new Card("_")).to_html()
-          dropOnFrac("numerateur")   
-        $( this ).css('z-index', 1)
-      stop:  (e) ->
-        $( this ).css('z-index', 0)
-        $( ".US" ).remove()
+  $( ".fraction[data-side='pioche']" ).draggable
+    containment: "#screen"
+    helper : 'clone'
+    revert: 'invalid' 
+    snap : true
+    snapMode : "inner"
+    start: (e) ->
+      if ( dropdenPower and (not blocked))
+        $("#lhs .denominateur, #rhs .denominateur" ).not($(".US").parent()).append (new Card("_")).to_html()
+        dropOnFrac("denominateur") 
+      if ( dropnumPower and (not blocked))
+        $("#lhs .numerateur, #rhs .numerateur" ).not($(".US").parent()).append (new Card("_")).to_html()
+        dropOnFrac("numerateur")   
+      $( this ).css('z-index', 2)
+    stop:  (e) ->
+      $( this ).css('z-index', 1)
+      $( ".US" ).remove()
   ##############################################################################
   $( ".fraction " ).not( ".fraction[data-side='pioche']" )
     .draggable
       revert: 'invalid'    
-      start: (e) -> $( this ).css('z-index', 1)
-      stop:  (e) -> $( this ).css('z-index', 0)    
-    .on "click", ->
-      if $(this).children(':last').is(':empty') and $(this).children(':first').children().is(':only-child')
-        #console.log "carte seule !"
-        carte = $(this).children(':first').children(':first')
-        if $.isNumeric( carte.attr("data-valeur") )
-          switch parseInt( carte.attr("data-valeur") )
-            when 0
-              $( this ).remove()
-              update_style() if stylePower
-              checkSuccess()   
+      start: (e) -> $( this ).css('z-index', 2)
+      stop:  (e) -> $( this ).css('z-index', 1)    
+  ##############################################################################            
   switch crossPower
     when true then $( ".fraction " ).not( ".fraction[data-side='pioche']" ).draggable containement : "document"
     else           $( ".fraction " ).not( ".fraction[data-side='pioche']" ).draggable containement : "parent"
   ##############################################################################
-  
-    
   multPowerSelector = if multPower then ".numerateur .carte:not(:only-child)" else "nothing"
   $( ".denominateur .carte, #{multPowerSelector}" ).not( ".fraction[data-side='pioche'] .carte").draggable
     helper : 'clone'
     revert: 'invalid'
     containment: "parent"
-    start: (e) -> $( this ).css('z-index', 1)
-    stop:  (e) -> $( this ).css('z-index', 0)
+    start: (e) -> $( this ).css('z-index', 2)
+    stop:  (e) -> $( this ).css('z-index', 1)
     drag : (e) ->
       margin = 10
       fraction = $(this).parent().parent()
@@ -812,11 +887,19 @@ draggableCards = () ->
   $( ".denominateur .carte" ).not( ".fraction[data-side='pioche'] .carte").each ->
     $el = $(this);
     $el.draggable containment: $el.parent().parent()  
+  
    
   $( ".carte[data-valeur='1']:not(:only-child)" ).not( ".fraction[data-side='pioche'] .carte" ).on "click", ->
       if not $(this).is(":only-child")
+        explosion_effect( $(this).offset() )
         $(this).remove()
         checkSuccess()
+  $( ".carte[data-valeur='0']" ).click (event, ui) ->
+    event.stopImmediatePropagation()
+    if $(this).closest(".fraction").parent().children(".fraction").length > 1
+      explosion_effect( $(this).offset() )
+      $(this).closest(".fraction").remove()
+      checkSuccess()
 
   ##############################################################################
   
@@ -853,33 +936,29 @@ insert = (data, sides=[]) ->
 ################################################################################
 ################################################################################
 ################################################################################
-delay   = (ms, func) -> setTimeout  func, ms
-looping = (ms, func) -> setInterval func, ms
-
 animation_tap = (element, image="tap" ) ->
   restart = -> 
-    $( "#astuce-simple-touch" ).show().css({ zIndex : 1000,background: "url('./css/images/#{image}.gif?#{Math.random()}')", top: depart.top-45, left: depart.left-5})
-    delay 1000, () -> $( "#astuce-simple-touch" ).fadeOut "slow"
+    $( "#astuce" ).show().css({ zIndex : 1000,background: "url('./css/images/#{image}.gif?#{Math.random()}')", top: depart.top-45, left: depart.left-5})
+    delay 1000, () -> $( "#astuce" ).fadeOut "slow"
 
   depart = element.offset()    
   restart()
   boucle = looping 3000, () -> restart()   
   $( "body" ).one "mousedown", -> 
     clearInterval boucle
-    $( "#astuce-simple-touch" ).hide()
-
+    $( "#astuce" ).hide()
+################################################################################
 animation_touch = (element1,element2) ->
   restart = ->    
     $( "body" ).append clone.show().css({position: "absolute", top: depart.top, left: depart.left})
-    $( "#astuce-simple-touch" ).show().css({ zIndex : 1000,background: "url('./css/images/touch.gif?#{Math.random()}')", top: depart.top-45, left: depart.left-5}) 
+    $( "#astuce" ).show().css({ zIndex : 1000,background: "url('./css/images/touch.gif?#{Math.random()}')", top: depart.top-45, left: depart.left-5}) 
     delay 1000, () ->
-      $( "#astuce-simple-touch" ).animate {top: destination.top-45, left: destination.left-5}
+      $( "#astuce" ).animate {top: destination.top-45, left: destination.left-5}
       clone.animate {top: destination.top, left: destination.left} , -> 
         $(this).fadeOut "slow", -> 
-          $( "#astuce-simple-touch" ).fadeOut("slow")  
+          $( "#astuce" ).fadeOut("slow")   
   
-  clone = element1.clone()
-  
+  clone = element1.clone() 
   switch element2
     when "lhs", "rhs"
       position = $( "##{element2}" ).offset()
@@ -888,17 +967,14 @@ animation_touch = (element1,element2) ->
     else
       position = element2.offset()
       destination = {top : position.top, left : position.left}
-  
   depart = element1.offset()
-  
   restart()
   boucle = looping 3000, () -> restart()   
   $( "body" ).one "mousedown", -> 
     clearInterval boucle
-    $( "#astuce-simple-touch" ).hide()
+    $( "#astuce" ).hide()
     clone.remove()
-    
-  
+################################################################################  
 astuces = ->
   switch "#{chapter}-#{level}"
     when "1-1"  then animation_tap( $( ".carte[data-valeur='0']" ).first() )
@@ -914,24 +990,26 @@ astuces = ->
     when "4-4"  then animation_tap( $( ".carte[data-valeur='6']" ).first(), "double-tap" )
     when "4-8"  then animation_touch( $( ".carte[data-valeur='2']" ).first(), $( ".carte[data-valeur='3']" ) )
     when "5-1"  then animation_tap( $( ".carte[data-valeur='-1']" ).first(), "double-tap" )
-      
+################################################################################
+################################################################################
+################################################################################     
 play = () ->
   console.log "...entering level #{level}"
   $( ".astuce, #victory-recap" ).hide()
+  $("#victory-recap").fireworks("destroy")
   $( "#level_info" ).html( "#{chapter}-#{level}" )
   $( "#pioche, #lhs, #rhs" ).hide()
   drop_once    = false if chapter>1
   reversePower = true  if ( (level>15 )  or (chapter>1) )
-  dropdenPower = true  if ( (chapter>1) and (level>10) or (chapter > 2) )
+  dropdenPower = true  if ( (chapter>1) and (level>10) or (chapter > 2) and (not ( (chapter is 3) and (level is 7) )) )
   dropnumPower = true  if ( (chapter>2) and (level>6)  or (chapter > 3) )
-  dropdenPower = false if ( (chapter is 3) and (level is 7) )
   crossPower   = true  if chapter > 2
   addPower     = true  if chapter > 3
   primePower   = true
   multPower    = true
-  doubleNegPower = true
+  doubleNegPower = true if chapter > 4
   switch "#{chapter}-#{level}"
-    when "2-19", "2-20", "3-17", "3-18", "3-19", "3-20", "4-17", "4-18", "4-19", "4-20" then stylePower = true
+    when "2-19", "2-20", "3-17", "3-18", "3-19", "3-20", "4-17", "4-18", "4-19", "4-20", "5-17","5-18","5-19","5-20" then stylePower = true
     else stylePower = false 
   level_data = game_chapter[chapter].level[level]
   level_data.reveal = level_data.reveal ? []
@@ -940,13 +1018,13 @@ play = () ->
   insert( level_data ) 
   draggableCards()
   astuces()
-
-      
+  #$( ".carte[data-valeur='x']" ).css background: "100% no-repeat url('./css/images/x-bg.gif')"
+################################################################################
+################################################################################
+################################################################################     
 
 $ ->
-  # custom code goes here 
   $( ".dialog" ).dialog( autoOpen: false )
-  #$( ".astuce" ).draggable().append "<div class='close'></div>"
   $("#screen").toggle()
       
   for i in [1..5]
@@ -956,64 +1034,36 @@ $ ->
   
   for i in ["1-1", "1-3", "1-9", "1-16", "2-1", "2-5", "2-11", "3-1", "3-7", "4-1", "4-4","4-8", "5-1"]
     $( "##{i}" ).append "<div class='star'></div>"
-    $( "#astuce-#{i}" ).toggle() 
-  
-  Reveal.initialize({
-			controls: true,
-			progress: true,
-			history: true,
-			center: true,
-			transition: 'concave', # none/fade/slide/convex/concave/zoom
-			# Optional reveal.js plugins
-			dependencies: [
-				{ src: 'lib/js/classList.js',         condition: () -> return !document.body.classList },
-				{ src: 'plugin/markdown/marked.js',   condition: () -> return !!document.querySelector( '[data-markdown]' ) },
-				{ src: 'plugin/markdown/markdown.js', condition: () -> return !!document.querySelector( '[data-markdown]' ) },
-				{ src: 'plugin/highlight/highlight.js', async: true, callback: () ->  hljs.initHighlightingOnLoad() },
-				{ src: 'plugin/zoom-js/zoom.js', async: true },
-				{ src: 'plugin/notes/notes.js', async: true }
-			]
-		})
-       
-  resize = () ->
-    size = Math.round( 50 * zoom / 100 )
-    space = Math.round( 5 * zoom / 100 )
-    s = 
-    """
-    .carte {
-      line-height : #{size}px;
-      width       : #{size}px;
-      height      : #{size}px;
-      background-size : 100%;
-    }
-    .fraction {
-      margin : 150px #{space} 0px #{space};
-    }
-    .fraction[data-style='true'], .bsign {
-      margin : 150px #{space} 0px #{space};
-    }
-    
-    .bsign {
-      font-size : #{size}px;
-    """
-    $( "#restyler" ).text s
-    
-  $( "#slider-zoom" ).slider range: "max", min: 50, max: 150,  step: 1, value: 100, slide : ( event, ui ) -> 
-    $( "#amount-zoom" ).html( ui.value )
-    zoom = parseInt $( "#amount-zoom" ).html()
-    resize()          
   
   $( ".close" ).on "click", -> $(this).parent().hide()
   $( "#back" ).button().on "click", -> $("#reveal,#screen").toggle()
   $( ".play" ).button().on "click", ->    play()
   $( ".next" ).on "click", -> play(level++)
-  $( ".up" ).on "click", -> $("#reveal,#screen").toggle()
+  $(  ".up"  ).on "click", -> $("#reveal,#screen").toggle()
   $( ".level" ).on "click", ->
     [chapter, level] = $(this).attr("id").split "-"
     [chapter, level] = [parseInt(chapter), parseInt(level)]
     $("#reveal,#screen").toggle()
-    play()  
-   
+    play() 
+  
+  Reveal.initialize({
+    controls: true,
+    progress: true,
+    history: true,
+    center: true,
+    overview: false,
+    transition: 'concave', # none/fade/slide/convex/concave/zoom
+    # Optional reveal.js plugins
+    dependencies: [
+      { src: 'lib/js/classList.js',         condition: () -> return !document.body.classList },
+      { src: 'plugin/markdown/marked.js',   condition: () -> return !!document.querySelector( '[data-markdown]' ) },
+      { src: 'plugin/markdown/markdown.js', condition: () -> return !!document.querySelector( '[data-markdown]' ) },
+      { src: 'plugin/highlight/highlight.js', async: true, callback: () ->  hljs.initHighlightingOnLoad() },
+      { src: 'plugin/zoom-js/zoom.js', async: true },
+      { src: 'plugin/notes/notes.js', async: true }
+    ]
+  })
+  
   
 
 

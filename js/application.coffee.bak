@@ -885,25 +885,21 @@ $ ->
       height      : #{size}px;
       background-size : 100%;
     }
+    .fraction {
+      margin : 150px #{space} 0px #{space};
+    }
     .fraction[data-style='true'], .bsign {
       margin : 150px #{space} 0px #{space};
     }
+    
     .bsign {
       font-size : #{size}px;
     """
     $( "#restyler" ).text s
-    console.log zoom
     
-  $( "#slider-zoom" ).slider
-    range: "max"
-    min   : 50
-    max   : 100
-    step  : 1
-    value : 100
-    slide : ( event, ui ) -> 
-      $( "#amount-zoom" ).html( ui.value )
-      zoom = parseInt $( "#amount-zoom" ).html()
-      resize()          
-  
+  $( "#slider-zoom" ).slider range: "max", min: 50, max: 150,  step: 1, value: 100, slide : ( event, ui ) -> 
+    $( "#amount-zoom" ).html( ui.value )
+    zoom = parseInt $( "#amount-zoom" ).html()
+    resize()          
 
 
