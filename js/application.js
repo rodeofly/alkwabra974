@@ -615,21 +615,21 @@
           lhs: ["-x/d.-b"],
           rhs: ["4/-4.-d.b"],
           pioche: ["1", "d", "b"],
-          reveal: ["b", "x", "d"],
+          reveal: ["all"],
           shots: 13
         },
         19: {
           lhs: ["x.3.-2"],
           rhs: ["2.-2", "4", "e"],
           pioche: ["6"],
-          reveal: ["x", "e"],
+          reveal: ["all"],
           shots: 13
         },
         20: {
           lhs: ["b/-4", "-1.-3"],
           rhs: ["x/2", "-1.-3"],
           pioche: ["2", "3"],
-          reveal: ["x", "b"],
+          reveal: ["all"],
           shots: 14
         }
       }
@@ -1624,7 +1624,7 @@
       $("#chaptersEnd").before("<section id='chapter" + i + "' class='chapter'><h2>Chapitre " + i + "</h2></section>");
       for (j = _j = 1; _j <= 20; j = ++_j) {
         $("#chapter" + i).append("<div class='level' id='" + i + "-" + j + "'>" + j + "</div>");
-        $("#" + i + "-" + j).append($("#score" + i + "-" + j));
+        $("#" + i + "-" + j).append("<div id='score" + i + "-" + j + "' class='score'></div>");
       }
     }
     _ref4 = ["1-1", "1-3", "1-9", "1-16", "2-1", "2-5", "2-11", "3-1", "3-7", "4-1", "4-4", "4-8", "5-1"];
@@ -1688,7 +1688,5 @@
   };
 
   $(document).ready(ready);
-
-  $(document).on('page:load', ready);
 
 }).call(this);
