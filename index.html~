@@ -17,53 +17,37 @@
 
 <body >
 		<div id="reveal" class="reveal">
-			<!-- Any section element inside of this container is displayed as a slide -->
-			<div class="slides">
-				<section id="Intro">
-					
-				</section>
-
-				<!-- Example of nested vertical slides -->
-				<section id="chapters">
-					<section>
-						<h2>Choisis un chapitre !</h2>
-
-						<a href="#" class="navigate-down">
-							<img width="178" height="238" data-src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
-						</a>
-					</section>
-					
-					<section id="chaptersEnd">
-						<h2>Hey ! C'est tout pour le moment...</h2>
-						<p>Allez remonte !</p>
-						<br>
-						<a href="#/2">
-							<img width="178" height="238" data-src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Up arrow" style="transform: rotate(180deg); -webkit-transform: rotate(180deg);">
-						</a>
-					</section>
-				</section>
-			</div>
-		</div>
-
-  <div id="screen"> 
-		  <div id="lhs" data-style="false" data-side="lhs"></div>
-		  <div id="rhs" data-style="false" data-side="rhs"></div>
-      <div id="pioche" data-side="pioche"></div>
-      <div id="victory-recap">
-        <h1>YEAH !</h1>
-        <p id="feedback">Essaye le suivant...</p>
-        <div class="next"></div><div class="up"></div>
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+        <section id="Intro"></section>
+        <!-- Example of nested vertical slides -->
+        <section id="chapters">
+          <section>
+            <h2>Choisis un chapitre !</h2>
+            <a href="#" class="navigate-down"><img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow"></a>
+          </section>
+          <section id="chaptersEnd">
+            <h2>Hey ! C'est tout pour le moment...</h2><p>Allez remonte !</p><br>
+            <a href="#/2"><img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Up arrow" style="transform: rotate(180deg); -webkit-transform: rotate(180deg);"></a>
+          </section>
+        </section>
       </div>
-      <div id="wow_dialog" class="dialog">!</div>
-      <div id="astuce" class="astuce"></div>
-      <div id="panel_bottom">    
-        <div>zoom x<span id="amount-zoom">100</span></div><div id="slider-zoom"></div>
-        <button id="back">Menu</button><button class="play">Refaire</button><span id="level_info"></span>
-      </div> 
   </div>
   
-  
-  
+  <div id="screen"> 
+      <div id="lhs" data-style="false" data-side="lhs"></div>
+      <div id="rhs" data-style="false" data-side="rhs"></div>
+      <div id="pioche" data-side="pioche"></div>
+      <div id="victory-recap">
+        <%= image_tag("thumb-up.png") %><div class="next"></div><div class="up"></div>
+      </div>
+      <div id="wow-dialog">!</div><div id="astuce"></div><div id="victory-anime"></div>
+      <div id="panel_bottom">
+        <button id="back">Menu</button><button class="play">Refaire</button><button id="shots"></button>
+      </div> 
+  </div>
+
+
   <script src="lib/js/head.min.js"></script>
   <script src="js/reveal.js"></script>
   <script src="js/jquery.fireworks.js"></script>

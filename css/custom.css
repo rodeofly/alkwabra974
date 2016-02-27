@@ -2,6 +2,12 @@
 	jQuery Mobile Boilerplate
 	css/custom.css
 */
+.section h2 {
+  font-size : 3em !important;
+  font-weight : bolder;
+
+}
+
 #Intro {
   background : url('./images/steps/intro.jpg') 100% no-repeat;
   width : 900px;
@@ -19,11 +25,11 @@
   border-radius : 10px;
 }
 
-.star {
+.new-power {
   position :absolute;
   width : 50px;
   height: 50px;
-  background: url('./images/star.png');
+  background: url('./images/light.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
  
@@ -52,6 +58,7 @@
   width : 100%;
   height: 100%;
 
+
 }
 
 #screen, #victory-recap {
@@ -72,6 +79,7 @@
   font-size : 3em;
   font-weight : bolder;
   z-index : 5;
+  background : center no-repeat url('./images/thumb-up.png');
 }
 
 .next, .up {
@@ -93,40 +101,13 @@
   background-size: 100% 100%;
   background-repeat: no-repeat;
   left : 20%;
-
 }
-
-.astuce[data-click=''] {
-  position : fixed;
-  top : 10%;
-  left : 50%;
-  width : 200px;
-  padding : 50px;
-  background-color : rgba(128,128,0,0.75);
-  color : white;
-  font-size : 25px;
-  text-align : justify;
-  border : solid black 5px;
-  border-radius : 25px;
-  box-shadow : 20px 20px 10px rgba(0,0,0,0.5);
-}
-
-.astuce[data-click='tap'] {
+#astuce {
   position : absolute;
-  background: url('./images/tap.gif');
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
   width : 124px;
   height : 70px;
 }
-.astuce[data-click='touch'] {
-  position : absolute;
-  background: url('./images/touch.gif');
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  width : 124px;
-  height : 70px;
-}
+
 
 #panel_bottom {
  position : absolute ;
@@ -146,7 +127,9 @@
 
   position : absolute;
   margin   : 0;
-  padding  : 0; 
+  padding  : 0;
+  border   : solid black 5px;
+  border-radius    : 10px;
 }
 
 #lhs, #rhs {
@@ -156,9 +139,8 @@
   top      : 2%;
   width    : 45%;
   height   : 70%;
-  background-color : rgba( 255, 255 , 255 , 0.5);
-  border           : solid black 5px;
-  border-radius    : 10px;
+  background-color : rgba( 128 , 128 , 128 , 0.5);
+ 
   white-space: nowrap;
 }
 #lhs {
@@ -184,7 +166,7 @@
   display : inline-block;
   margin  : 0;
   padding : 0;
-  background : 100% no-repeat url('./images/bulle.gif');
+  background : none;
 }
 
 .carte {
@@ -198,10 +180,32 @@
   background-color: white;
   background-size : 100%;
   border-radius : 5px;
+  border : solid black 1px;
   z-index : 1;
 }
+
+@keyframes changecolor {
+  from {
+    box-shadow: 0 0 25px 25px rgba(255,255,0,0.5);;
+  }
+
+  to {
+    box-shadow: 0 0 25px 25px rgba(255,0,0,0.25);;    
+  }
+}
+
+#lhs .carte[data-valeur='x'], #rhs .carte[data-valeur='x'] {
+  animation-duration: 5s;
+  animation-name: changecolor;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  
+}
+
+
 .fraction {
-  padding: 10px;
+  padding  : 10px;
+  position : absolute;
   /*border : solid black 2px;*/
 }
 .numerateur, .denominateur {
@@ -238,11 +242,13 @@
  display : none;
 }
 
-#wow_dialog {
+#wow-dialog {
   font-size   : 75px;
   font-weight : bolder;
-  text-align  : center;
+  text-align  : center; 
 }
+
+
 .ui-dialog-titlebar {
 
   display : none !important;
@@ -251,17 +257,18 @@
     padding: 0 !important;;
 }
 
-.active-denominateur { box-shadow : 0px 0px 5px 5px yellow  !important; }
-.hover-denominateur  { box-shadow : 0px 0px 5px 5px white !important; }
-.active-numerateur { box-shadow : 0px 0px 5px 5px blue  !important; }
-.hover-numerateur  { box-shadow : 0px 0px 5px 5px white !important; }
+.shine-yellow { box-shadow : 0px 0px 5px 5px yellow  !important; }
+.shine-white  { box-shadow : 0px 0px 5px 5px white !important; }
+.shine-blue   { box-shadow : 0px 0px 5px 5px blue  !important; }
+.shine-white  { box-shadow : 0px 0px 5px 5px white !important; }
 
 
 .fraction[data-style='true']:not([data-side='pioche']) {
-  display : flex;
-  flex-flow: column nowrap;
-  align-items : center;
-  margin : 2px;
+  position: relative;
+  display : inline-block;
+  top     : 0;
+  left    : 0;
+  margin  : 2px;
 
 }
 
@@ -298,11 +305,21 @@
 
 }
 
-.DF, .DC, .US {
+.DC, .US {
   background-color : rgba(0,0,0,0);
   background-image : url('./images/cartes/DC.png');
   background-size : 100%;  
+}
 
+.carte.rootDrop {
+  position : absolute;
+  top      : 0%;
+  left     : 0%;
+  width    : 100%;
+  height   : 100%;
+  background-color : rgba(0,0,0,0);
+  background-image : url('./images/cartes/DC.png');
+  background-size : 100% 100%;
 }
 
 .explosion {
@@ -312,4 +329,65 @@
   height   : 100px;
 }
 
+#victory-anime {
+  position : absolute;
+  top:0;
+  left:0;
+  width: 100%;
+  height: 100%;
+  z-index:0;
+  background : center no-repeat url('./images/countdown.gif');
+}
+
+#shots {
+  position : relative;
+  display  : block;
+  margin : auto;
+  width : 100px;
+  top : 0;
+
+}
+.chapter {
+  background : no-repeat url('./images/chapters/chapter1.jpg');
+  background-size : 100%;
+
+}
+.reward {
+  position:absolute;
+  top:35%;
+  width:100%;
+  text-align : center;
+}
+
+.star-reward {
+ display:inline-block;
+ width:200px;
+ height:200px;
+ background : no-repeat url('./images/star.png');
+ background-size : 100%;
+}
+
+.score {
+  position : absolute ;
+  height : 25px;
+  padding : 0;
+  margin :0;
+  display :flex;
+  bottom : -20px;
+  left : -10px;
+  flex-flow : row nowrap;
+  width:75px;
+  align-content : flex-end;
+}
+
+.star-point {
+  display:inline-block;
+  padding:0;
+  margin:auto;;
+  width:25px;
+  height:25px;
+  background : no-repeat url('./images/star.png');
+  background-size:100%;
+  background-color : none;
+}
 
