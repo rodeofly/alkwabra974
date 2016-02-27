@@ -68,7 +68,7 @@
 }
 
 #victory-recap {
-  background : rgba( 0,0,0,0.75);
+  background-color : rgba( 0,0,0,0.75);
   position : absolute;
   top : 0;
   left : 0;
@@ -79,7 +79,6 @@
   font-size : 3em;
   font-weight : bolder;
   z-index : 5;
-  background : center no-repeat url('./images/thumbup.png');
 }
 
 .next, .up {
