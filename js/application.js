@@ -687,7 +687,7 @@
           if ((__indexOf.call(level_data.reveal, "all") >= 0) || (_ref4 = this.string, __indexOf.call(level_data.reveal, _ref4) >= 0) || ($.isNumeric(this.string) && (__indexOf.call(level_data.reveal, "numbers") >= 0))) {
             return "<div id='" + this.id + "' class='carte' data-valeur='" + this.string + "' data-style='" + stylePower + "' style='background-image : none;'>" + this.string + "</div>";
           } else {
-            return "<div id='" + this.id + "' class='carte' data-valeur='" + this.string + "' data-style='" + stylePower + "' style='background-image : url(../assets/cartes/" + this.string + ".png);'>&nbsp;</div>";
+            return "<div id='" + this.id + "' class='carte' data-valeur='" + this.string + "' data-style='" + stylePower + "' style='background-image : url(./assets/cartes/" + this.string + ".png);'>&nbsp;</div>";
           }
       }
     };

@@ -551,7 +551,7 @@ class Card
         if ( ("all" in level_data.reveal) or (@string in level_data.reveal) or ($.isNumeric(@string) and ("numbers" in level_data.reveal)))
           return "<div id='#{@id}' class='carte' data-valeur='#{@string}' data-style='#{stylePower}' style='background-image : none;'>#{@string}</div>"
         else  
-          return "<div id='#{@id}' class='carte' data-valeur='#{@string}' data-style='#{stylePower}' style='background-image : url(../assets/cartes/#{@string}.png);'>&nbsp;</div>"
+          return "<div id='#{@id}' class='carte' data-valeur='#{@string}' data-style='#{stylePower}' style='background-image : url('./assets/cartes/#{@string}.png');'>&nbsp;</div>"
       
   moveTo : (@string) -> 
     #console.log "moveTo", @string
@@ -1174,7 +1174,7 @@ ready = ->
     $( "#chaptersEnd" ).before "<section id='chapter#{i}' class='chapter'><h2>Chapitre #{i}</h2></section>"
     for j in [1..20]
       $( "#chapter#{i}" ).append "<div class='level' id='#{i}-#{j}'>#{j}</div>"
-      $( "##{i}-#{j}" ).append "<div id='score' class='score#{i}-#{j}'></div>"
+      $( "##{i}-#{j}" ).append "<div id='score#{i}-#{j}' class='score'></div>"
   for i in ["1-1", "1-3", "1-9", "1-16", "2-1", "2-5", "2-11", "3-1", "3-7", "4-1", "4-4","4-8", "5-1"]
     $( "##{i}" ).append "<div class='new-power'></div>"
   
