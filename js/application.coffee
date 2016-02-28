@@ -551,7 +551,7 @@ class Card
         if ( ("all" in level_data.reveal) or (@string in level_data.reveal) or ($.isNumeric(@string) and ("numbers" in level_data.reveal)))
           return "<div id='#{@id}' class='carte' data-valeur='#{@string}' data-style='#{stylePower}' style='background-image : none;'>#{@string}</div>"
         else  
-          return "<div id='#{@id}' class='carte' data-valeur='#{@string}' data-style='#{stylePower}' style='background-image : url(./assets/cartes/#{@string}.png);'>&nbsp;</div>"
+          return "<div id='#{@id}' class='carte' data-valeur='#{@string}' data-style='#{stylePower}' style='background-image : url(../assets/cartes/#{@string}.png);'>&nbsp;</div>"
       
   moveTo : (@string) -> 
     #console.log "moveTo", @string
@@ -594,7 +594,7 @@ looping = (ms, func) -> setInterval func, ms
 explosion_effect = (place_id, target) ->
   position = $( "##{place_id}" ).offset()
   $("body").append "<div id='#{id = unique_id++}' style='top: #{position.top-25}px; left: #{position.left-25}px;' class='explosion'></div>"
-  $("##{id}").css {background: "url('../assets/explosion.gif?#{Math.random()}')" }
+  $("##{id}").css {background: "url('./assets/explosion.gif?#{Math.random()}')" }
   target.remove()
   $("##{id}").fadeOut 800, ->
     shots++
@@ -1083,7 +1083,7 @@ insert = (data, sides=[]) ->
 animation_tap = (element, image="tap" ) ->
   depart = element.offset()    
   restart = -> 
-    $( "#astuce" ).show().css({ zIndex : 1000,background: "url('../assets/#{image}.gif?#{Math.random()}')", top: depart.top-75, left: depart.left-5})
+    $( "#astuce" ).show().css({ zIndex : 1000,background: "url('./assets/#{image}.gif?#{Math.random()}')", top: depart.top-75, left: depart.left-5})
     delay 1000, () -> $( "#astuce" ).fadeOut "slow" 
   
   restart()
@@ -1096,7 +1096,7 @@ animation_touch = (element1,element2) ->
   depart = element1.offset()
   restart = ->    
     $( "body" ).append clone.show().css({position: "absolute", top: depart.top, left: depart.left})
-    $( "#astuce" ).show().css({ zIndex : 1000,background: "url('../assets/touch.gif?#{Math.random()}')", top: depart.top-75, left: depart.left-5}) 
+    $( "#astuce" ).show().css({ zIndex : 1000,background: "url('./assets/touch.gif?#{Math.random()}')", top: depart.top-75, left: depart.left-5}) 
     delay 1000, () ->
       $( "#astuce" ).animate {top: destination.top-75, left: destination.left-5}
       clone.animate {top: destination.top, left: destination.left} , -> 
