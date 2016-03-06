@@ -669,6 +669,7 @@ checkSuccess = () ->
       xSide = x.parent().parent().parent()
       if (xSide.find(".carte").length is 1)
         console.log "success !"
+        $( "button" ).button( "disable" )
         won = true
         $( "#lhs, #rhs" ).droppable( "destroy" )
         $( "#astuce" ).hide()
@@ -749,6 +750,7 @@ checkSuccess = () ->
             else
               $( ".next,.up" ).show()
             $( "#victory-recap" ).show().fireworks()
+            $( "button" ).button( "enable" )
 ################################################################################  
 update_style = () ->
   $( ".bsign" ).remove()
