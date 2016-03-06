@@ -1173,6 +1173,7 @@ play = () ->
 ################################################################################     
 ready = ->
   $( "button" ).button()
+  console.log "done"
   for i in [1..5]
     $( "#chaptersEnd" ).before "<section id='chapter#{i}' class='chapter'><h2>Chapitre #{i}</h2></section>"
     for j in [1..20]
