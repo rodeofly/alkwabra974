@@ -1561,6 +1561,7 @@
 
   play = function() {
     var i, k, len, ref4, ref5, ref6;
+    $("button").button();
     console.log("...entering level " + level);
     toSend_reset();
     boolean_reset();
@@ -1619,8 +1620,6 @@
 
   ready = function() {
     var i, j, k, l, len, m, ref4;
-    $("button").button();
-    console.log("done");
     for (i = k = 1; k <= 5; i = ++k) {
       $("#chaptersEnd").before("<section id='chapter" + i + "' class='chapter'><h2>Chapitre " + i + "</h2></section>");
       for (j = l = 1; l <= 20; j = ++l) {
