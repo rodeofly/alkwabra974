@@ -61,7 +61,7 @@
 
 }
 
-#screen, #victory-recap {
+#screen {
   position : relative;
   background : url('./images/jungle.jpg');
   background-size : 100%;

@@ -762,7 +762,10 @@ flash_alert = (element) ->
     width    : '50px'
     height   : 100
     show     : { effect: "blind", duration: 100 }
-    open     : (event, ui) -> setTimeout("$('#wow-dialog').dialog('close')",1000)
+    open     : (event, ui) -> 
+      setTimeout -> 
+        $('#wow-dialog').dialog('close')
+      ,1000
     position : { my: "center bottom", at: "center top", of: element }
   $( "#wow-dialog" ).dialog "open"
 ################################################################################
@@ -771,7 +774,7 @@ flash_alert = (element) ->
 block = (draggable) ->
   console.log "Entering block mode..."
   $( "body" ).off "click", "#pioche .carte"
-  $( "body" ).off "dblclick", ".fraction .carte:not(.fraction[data-side='pioche'])"
+  $( "body" ).off "click", ".green"
   $( ".carte" ).not(draggable.find(".carte")).on "touchstart mousedown", -> flash_alert(draggable)
   $( ":ui-draggable" ).not(draggable).draggable( "destroy" )
   $( ":ui-droppable" ).droppable( "destroy" )
@@ -914,7 +917,7 @@ ability_to_delete_useless_card = () ->
 ################################################################################
 ################################################################################    
 primeFactorPower = () ->  
-  $( "body" ).on "dblclick", ".fraction .carte:not(.fraction[data-side='pioche'])", (event, ui) ->
+  $( "body" ).on "click", ".green", (event, ui) ->
     event.stopImmediatePropagation()
     value = $(this).attr("data-valeur")
     console.log value
@@ -1141,6 +1144,7 @@ astuces = ->
 ################################################################################
 ################################################################################    
 play = () ->
+  $( "button" ).button()
   console.log "...entering level #{level}"
   toSend_reset()
   boolean_reset()
@@ -1171,8 +1175,22 @@ play = () ->
 ################################################################################
 ################################################################################
 ################################################################################     
+
+new_power = ->
+  $( "body" ).on "click", ".carte:not(#pioche .carte):not(.green)", (event, ui) ->
+    event.stopEventPropagation() 
+    $( ".carte:not(#pioche .carte)" ).removeClass("green")
+    $( this ).addClass("green")
+  $( "body" ).on "click", -> $( ".carte:not(#pioche .carte)" ).removeClass("green")
+
+################################################################################
+################################################################################
+################################################################################     
+
+
+
 ready = ->
-  $( "button" ).button()
+  new_power()
   for i in [1..5]
     $( "#chaptersEnd" ).before "<section id='chapter#{i}' class='chapter'><h2>Chapitre #{i}</h2></section>"
     for j in [1..20]
